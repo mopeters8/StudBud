@@ -9,23 +9,20 @@ app.use(express.urlencoded({ extended: false }))
 //routers
 app.use('/', pageRouter)
 
-//Login page.
-app.get('/login', function (req, res) {
-    res.render('login.ejs')
+
+//errors: page not found
+app.use((req, res, next) => {
+    var err = new Error('Page not found! Sorry friend :(');
+    err.status = 404;
+    next(err);
+})
+
+//handling errors
+app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.send(err.message);
 });
 
-app.post('/login', (req, res) => {
-
-});
-
-//register page.
-app.get('/register', function (req, res) {
-    res.render('register.ejs')
-});
-
-app.post('/register', (req, res) => {
-    
-});
 
 //Starting on port 3000.
 app.listen(3000, function () {
