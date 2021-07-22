@@ -31,12 +31,17 @@ User.prototype = {
             bind.push(body[prop]);
         }
 
-        let sql = 'INSERT INTO users(username, fullname, password) VALUES (?, ?, ?)';
+        try {
+            // let sql = `INSERT INTO users(username, fullname, password) VALUES (?, ?, ?)`;
+            let sql = `SELECT * FROM users;`;
 
-        pool.query(sql, bind, function(err, lastId) {
-            if(err) throw err;
-            callback(lastId);
-        });
+            pool.query(sql, bind, function(err, lastId) {
+                if(err) console.log(err);
+                callback(lastId);
+            });
+        } catch(e) {
+            console.log(e);
+        }
     },
 
     login : function(username, password, callback)
