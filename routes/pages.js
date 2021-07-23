@@ -27,7 +27,6 @@ router.post('/login', (req, res, next) => {
 
 //post register data
 router.post('/register', (req, res, next) => {
-    console.log(req.body)
     let userInput = {
         username: req.body.email,
         fullname: req.body.name,
