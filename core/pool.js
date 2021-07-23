@@ -10,13 +10,12 @@ const myConnection = mysql.createPool({
     host: 'localhost' ,
     user: 'root',
     password: 'root',
-    databse: 'www'
+    database: 'www'
 });
 
 myConnection.getConnection((err, connection) => {
     if(err)
         console.error("Something went wrong connecting to the database..");
-
     if (connection)
         connection.release();
     return;
