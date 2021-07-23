@@ -32,8 +32,8 @@ User.prototype = {
         }
 
         try {
-            // let sql = `INSERT INTO users(username, fullname, password) VALUES (?, ?, ?)`;
-            let sql = `SELECT * FROM users;`;
+            let sql = `INSERT INTO users(username, fullname, password) VALUES (?, ?, ?)`;
+            // let sql = `SELECT * FROM users;`;
 
             pool.query(sql, bind, function(err, lastId) {
                 if(err) console.log(err);

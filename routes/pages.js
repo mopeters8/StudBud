@@ -28,8 +28,8 @@ router.post('/login', (req, res, next) => {
 //post register data
 router.post('/register', (req, res, next) => {
     let userInput = {
-        username: req.body.username,
-        fullname: req.body.fullname,
+        username: req.body.email,
+        fullname: req.body.name,
         password: req.body.password
     };
 
