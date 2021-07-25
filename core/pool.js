@@ -1,27 +1,25 @@
 const util = require('util');
 const mysql = require('mysql');
-
 /**
  * Connection to the database.
- */
-
-const myConnection = mysql.createPool({
+ *  */
+const pool = mysql.createPool({
     connectionLimit: 10,
-    host: 'localhost' ,
-    user: 'root',
-    password: 'root',
-    databse: 'www'
+    host: 'localhost',
+    user: 'root', // use your mysql username.
+    password: 'root', // user your mysql password.
+    database: 'www'
 });
 
-myConnection.getConnection((err, connection) => {
-    if(err)
-        console.error("Something went wrong connecting to the database..");
-
-    if (connection)
+pool.getConnection((err, connection) => {
+    if(err) 
+        console.error("Something went wrong connecting to the database ...");
+    
+    if(connection)
         connection.release();
     return;
 });
 
-myConnection.query = util.promisify(myConnection.query);
+pool.query = util.promisify(pool.query);
 
-module.exports = myConnection;
+module.exports = pool;

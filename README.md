@@ -1,2 +1,0 @@
-# StudBud
-Summer Challenge Project
