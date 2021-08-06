@@ -1,9 +1,11 @@
+const { application } = require('express');
 const express = require('express');
 const User = require('../core/user');
 const router = express.Router();
 
 // create an object from the class User in the file core/user.js
 const user = new User();
+
 
 // Get the index page
 router.get('/', (req, res, next) => {
@@ -14,9 +16,8 @@ router.get('/', (req, res, next) => {
         return;
     }
     // IF not we just send the index page.
-    res.render('index', {title:"My application"});
+    res.render('newindex.ejs', {title:"My application"});
 })
-
 // Get home page
 router.get('/home', (req, res, next) => {
     let user = req.session.user;
@@ -39,7 +40,7 @@ router.post('/login', (req, res, next) => {
             req.session.opp = 1;
             // redirect the user to the home page.
             res.redirect('/home');
-        }else {
+        } else {
             // if the login function returns null send this error message back to the user.
             res.send('Username/Password incorrect!');
         }
@@ -47,13 +48,12 @@ router.post('/login', (req, res, next) => {
 
 });
 
-
 // Post register data
 router.post('/register', (req, res, next) => {
     // prepare an object containing all user inputs.
     let userInput = {
         username: req.body.username,
-        fullname: req.body.fullname,
+        fullname: req.body.email,
         password: req.body.password
     };
     // call create function. to create a new user. if there is no error this function will return it's id.
