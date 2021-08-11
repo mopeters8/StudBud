@@ -85,6 +85,11 @@ User.prototype = {
             // return the last inserted id. if there is no error
             callback(result.insertId);
         });
+    },
+
+    get_data : function(user, callback)
+    {
+        
     }
 
 }

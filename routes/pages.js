@@ -1,5 +1,7 @@
+const pool = require('./../core/pool.js');
 const { application } = require('express');
 const express = require('express');
+const Pool = require('mysql/lib/Pool');
 const User = require('../core/user');
 const router = express.Router();
 
@@ -29,15 +31,7 @@ router.get('/discover', (req, res, next) => {
     res.redirect('/');
 });
 
-router.get('/settings', (req, res, next) => {
-    let user = req.session.user;
-    if(user) {
-        res.render('settings.ejs')
-        return;
-    }
-    res.redirect('/');
-});
-
+//Rendering the chat page
 router.get('/chat', (req, res, next) => {
     let user = req.session.user;
     if(user) {
@@ -47,6 +41,24 @@ router.get('/chat', (req, res, next) => {
     res.redirect('/');
 });
 
+//Rendering settings page.
+router.get('/settings', function (req, res) {
+    let user = req.session.user;
+
+    if(user) {
+        // var field = req.session.user.username
+        // pool.query(`SELECT * FROM users WHERE username = '${field}'`, function(err, rows, fields) {
+        //     console.log(rows)
+        //     if (err) throw err
+        //         res.render('settings.ejs', {title: 'data', items: rows })
+        // })
+
+        res.render('settings.ejs')
+        return;
+    }
+});
+
+//Posting to submit settings changes.
 router.post('/submit_changes', (req, res, next) => {
     // prepare an object containing all user inputs.
     let userInput = {
@@ -60,7 +72,6 @@ router.post('/submit_changes', (req, res, next) => {
         bio: req.body.bio,
     };
 
-    console.log(userInput) //testing
     user.settings(userInput, function(lastId) {
     });
 
