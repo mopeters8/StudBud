@@ -12,21 +12,71 @@ router.get('/', (req, res, next) => {
     let user = req.session.user;
     // If there is a session named user that means the use is logged in. so we redirect him to home page by using /home route below
     if(user) {
-        res.redirect('/home');
+        res.redirect('/discover');
         return;
     }
     // IF not we just send the index page.
     res.render('newindex.ejs', {title:"My application"});
 })
 // Get home page
-router.get('/home', (req, res, next) => {
+router.get('/discover', (req, res, next) => {
     let user = req.session.user;
-
     if(user) {
-        res.render('home', {opp:req.session.opp, name:user.email});
+        //res.render('discover.ejs', {opp:req.session.opp, name:user.email}); what I had before
+        res.render('discover.ejs', {opp:req.session.opp, name:user.email});
         return;
     }
     res.redirect('/');
+});
+
+router.get('/settings', (req, res, next) => {
+    let user = req.session.user;
+    if(user) {
+        res.render('settings.ejs')
+        return;
+    }
+    res.redirect('/');
+});
+
+router.get('/chat', (req, res, next) => {
+    let user = req.session.user;
+    if(user) {
+        res.render('chat.ejs')
+        return;
+    }
+    res.redirect('/');
+});
+
+router.post('/submit_changes', (req, res, next) => {
+    // prepare an object containing all user inputs.
+    let userInput = {
+        userId: req.session.user.id,
+        username: req.session.user.username,
+        fname: req.body.fname,
+        lname: req.body.lname,
+        uni: req.body.uni,
+        major: req.body.major,
+        minor: req.body.minor, 
+        bio: req.body.bio,
+    };
+
+    console.log(userInput) //testing
+    user.settings(userInput, function(lastId) {
+        // if the saving of the user settings goes well we should get an integer (id of the inserted user)
+        if(lastId) {
+            // Get the user data by it's id. and store it in a session.
+            user.find(lastId, function(result) {
+                req.session.user = result;
+                req.session.opp = 0;
+                res.redirect('/discover');
+            });
+
+        } else {
+            console.log('Error creating a new user ...');
+        }
+    });
+
+    res.redirect('/settings')
 });
 
 // Post login data
@@ -39,7 +89,7 @@ router.post('/login', (req, res, next) => {
             req.session.user = result;
             req.session.opp = 1;
             // redirect the user to the home page.
-            res.redirect('/home');
+            res.redirect('/discover');
         } else {
             // if the login function returns null send this error message back to the user.
             res.send('Username/Password incorrect!');
@@ -64,10 +114,10 @@ router.post('/register', (req, res, next) => {
             user.find(lastId, function(result) {
                 req.session.user = result;
                 req.session.opp = 0;
-                res.redirect('/home');
+                res.redirect('/discover');
             });
 
-        }else {
+        } else {
             console.log('Error creating a new user ...');
         }
     });
@@ -76,7 +126,7 @@ router.post('/register', (req, res, next) => {
 
 
 // Get loggout page
-router.get('/loggout', (req, res, next) => {
+router.get('/logout', (req, res, next) => {
     // Check if the session is exist
     if(req.session.user) {
         // destroy the session and redirect the user to the index page.

@@ -14,8 +14,7 @@ User.prototype = {
             var field = Number.isInteger(user) ? 'id' : 'username';
         }
         // prepare the sql query
-        let sql = `SELECT * FROM users WHERE ${field} = ?`;
-
+        let sql = `SELECT * FROM logins WHERE ${field} = ?`;
 
         pool.query(sql, user, function(err, result) {
             if(err) throw err
@@ -43,7 +42,7 @@ User.prototype = {
             bind.push(body[prop]);
         }
         // prepare the sql query
-        let sql = `INSERT INTO users(username, fullname, password) VALUES (?, ?, ?)`;
+        let sql = `INSERT INTO logins(username, fullname, password) VALUES (?, ?, ?)`;
         // call the query give it the sql string and the values (bind array)
         pool.query(sql, bind, function(err, result) {
             if(err) throw err;
@@ -68,7 +67,24 @@ User.prototype = {
             // if the username/password is wrong then return null.
             callback(null);
         });
-        
+    },
+
+    settings : function(username, fname, lname, uni, major, minor, bio, callback)
+    {
+        // this array will contain the values of the fields.
+        var bind = [];
+        // loop in the attributes of the object and push the values into the bind array.
+        for(prop in body){
+            bind.push(body[prop]);
+        }
+        // prepare the sql query
+        let sql = `INSERT INTO users(id, username, fname, lname, uni, major, minor, bio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        // call the query give it the sql string and the values (bind array)
+        pool.query(sql, bind, function(err, result) {
+            if(err) throw err;
+            // return the last inserted id. if there is no error
+            callback(result.insertId);
+        });
     }
 
 }
