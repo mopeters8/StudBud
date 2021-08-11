@@ -69,7 +69,7 @@ User.prototype = {
         });
     },
 
-    settings : function(username, fname, lname, uni, major, minor, bio, callback)
+    settings : function(body, callback)
     {
         // this array will contain the values of the fields.
         var bind = [];

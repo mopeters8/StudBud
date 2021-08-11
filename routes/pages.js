@@ -62,18 +62,6 @@ router.post('/submit_changes', (req, res, next) => {
 
     console.log(userInput) //testing
     user.settings(userInput, function(lastId) {
-        // if the saving of the user settings goes well we should get an integer (id of the inserted user)
-        if(lastId) {
-            // Get the user data by it's id. and store it in a session.
-            user.find(lastId, function(result) {
-                req.session.user = result;
-                req.session.opp = 0;
-                res.redirect('/discover');
-            });
-
-        } else {
-            console.log('Error creating a new user ...');
-        }
     });
 
     res.redirect('/settings')
